@@ -132,7 +132,48 @@ const Sound = (() => {
     twinkle() { [2093, 2637, 3136, 2637, 3520].forEach((f, i) => tone({ type: 'sine', f0: f, dur: 0.18, vol: 0.12, at: i * 0.09 })); },
     love() { tone({ type: 'triangle', f0: 784, f1: 1047, dur: 0.25, vol: 0.2 }); tone({ type: 'triangle', f0: 1047, f1: 1319, dur: 0.35, vol: 0.2, at: 0.2 }); fx.squeak(2, 0.45); },
     bonk() { tone({ type: 'square', f0: 260, f1: 140, dur: 0.1, vol: 0.16, lp: 1400 }); tone({ f0: 900, f1: 1400, dur: 0.08, vol: 0.2, at: 0.12 }); tone({ f0: 1400, f1: 700, dur: 0.12, vol: 0.18, at: 0.22 }); },
+    // ice cream kitchen
+    scoop() { noise({ type: 'lowpass', f0: 900, f1: 250, dur: 0.18, vol: 0.35 }); tone({ f0: 420, f1: 180, dur: 0.16, vol: 0.25 }); },
+    plop() { tone({ f0: 260, f1: 520, dur: 0.07, vol: 0.35 }); tone({ f0: 520, f1: 200, dur: 0.12, vol: 0.25, at: 0.06 }); },
+    shake() { for (let i = 0; i < 6; i++) noise({ type: 'highpass', f0: 4000, dur: 0.05, vol: 0.2, at: i * 0.07 }); },
+    drizzle() { tone({ type: 'triangle', f0: 900, f1: 300, dur: 0.6, vol: 0.18, vib: 20, vibRate: 9 }); noise({ type: 'bandpass', f0: 600, dur: 0.5, vol: 0.12, q: 2 }); },
+    spray() { noise({ type: 'highpass', f0: 2500, f1: 5000, dur: 0.45, vol: 0.22, a: 0.03 }); },
+    ding() { tone({ f0: 1568, dur: 1.2, vol: 0.28 }); tone({ f0: 3136, dur: 0.6, vol: 0.08 }); tone({ f0: 2093, dur: 0.9, vol: 0.1, at: 0.02 }); },
+    crunch() { for (let i = 0; i < 4; i++) noise({ type: 'bandpass', f0: 1800, dur: 0.06, vol: 0.35, q: 1.2, at: i * 0.09 }); },
+    shiver() { tone({ type: 'triangle', f0: 600, f1: 500, dur: 0.9, vol: 0.2, vib: 80, vibRate: 22 }); noise({ type: 'highpass', f0: 5000, dur: 0.8, vol: 0.08 }); },
+    honk() { tone({ type: 'sawtooth', f0: 420, f1: 380, dur: 0.16, vol: 0.18, lp: 1400 }); tone({ type: 'sawtooth', f0: 460, f1: 420, dur: 0.18, vol: 0.18, lp: 1400, at: 0.2 }); },
+    grunt() { tone({ type: 'sawtooth', f0: 95, f1: 80, dur: 0.35, vol: 0.32, lp: 500, vib: 8, vibRate: 14 }); },
+    chirp() { [0, 0.12, 0.24].forEach(at => tone({ f0: 1800, f1: 2600, dur: 0.07, vol: 0.18, at })); },
+    toss() { tone({ f0: 300, f1: 1200, dur: 0.3, vol: 0.2 }); noise({ type: 'bandpass', f0: 1000, f1: 3000, dur: 0.3, vol: 0.12 }); },
+    cheer() { [523, 659, 784, 1047].forEach((f, i) => tone({ type: 'triangle', f0: f, dur: 0.35, vol: 0.16, at: i * 0.08 })); fx.sparkle(); },
     poof() { noise({ type: 'lowpass', f0: 1800, f1: 200, dur: 0.35, vol: 0.28 }); },
+    // pumpkin house
+    carve() {
+      for (let i = 0; i < 3; i++) noise({ type: 'bandpass', f0: 1400 + i * 500, f1: 700, dur: 0.1, vol: 0.3, q: 2.5, at: i * 0.11 });
+      tone({ f0: 300, f1: 1150, dur: 0.09, vol: 0.3, at: 0.36 });
+    },
+    ignite() {
+      noise({ type: 'bandpass', f0: 300, f1: 2400, dur: 0.6, vol: 0.3, q: 1.2, a: 0.08 });
+      tone({ type: 'triangle', f0: 220, f1: 880, dur: 0.6, vol: 0.18 });
+      [659, 880, 1047, 1319].forEach((f, i) => tone({ type: 'triangle', f0: f, dur: 0.4, vol: 0.12, at: 0.5 + i * 0.07 }));
+    },
+    rattle() { for (let i = 0; i < 8; i++) noise({ type: 'bandpass', f0: r(2200, 3600), dur: 0.035, vol: 0.28, q: 4, at: i * 0.055 + Math.random() * 0.02 }); },
+    xylo(n = 6) {
+      const notes = [69, 72, 76, 81, 76, 72, 74, 77, 81, 84];
+      for (let i = 0; i < n; i++) {
+        const f = 440 * Math.pow(2, (notes[i % notes.length] - 57) / 12);
+        tone({ type: 'sine', f0: f, dur: 0.22, vol: 0.26, a: 0.003, at: i * 0.12 });
+        tone({ type: 'sine', f0: f * 4, dur: 0.05, vol: 0.06, a: 0.002, at: i * 0.12 });
+      }
+    },
+    boo() { tone({ f0: 520, f1: 300, dur: 0.9, vol: 0.3, a: 0.08, vib: 25, vibRate: 7 }); tone({ type: 'triangle', f0: 780, f1: 450, dur: 0.9, vol: 0.08, a: 0.08, vib: 25, vibRate: 7 }); },
+    creak() { tone({ type: 'sawtooth', f0: 110, f1: 190, dur: 0.7, vol: 0.14, lp: 900, vib: 18, vibRate: 30 }); },
+    meow() { tone({ type: 'triangle', f0: 620, f1: 1050, dur: 0.18, vol: 0.24 }); tone({ type: 'triangle', f0: 1050, f1: 560, dur: 0.4, vol: 0.24, at: 0.17, vib: 12, vibRate: 8 }); },
+    batsqueak() { for (let i = 0; i < 4; i++) tone({ f0: r(2400, 3000), f1: r(3200, 3800), dur: 0.05, vol: 0.12, at: i * 0.13 + Math.random() * 0.05 }); },
+    party() {
+      [57, 60, 64, 69, 72, 76, 81].forEach((m, i) => tone({ type: 'triangle', f0: 440 * Math.pow(2, (m - 69) / 12), dur: 0.3, vol: 0.16, at: i * 0.09 }));
+      fx.xylo(8); fx.sparkle();
+    },
     rain() { for (let i = 0; i < 9; i++) tone({ f0: r(1500, 2600), f1: r(700, 1100), dur: 0.05, vol: 0.11, at: i * 0.08 + Math.random() * 0.05 }); },
   };
 
@@ -149,6 +190,11 @@ const Sound = (() => {
       mel: [79, _, 76, _, 72, _, 76, _, 74, _, 72, _, 69, _, _, _, 72, _, 76, _, 79, _, 77, _, 76, _, 74, _, 72, _, _, _],
       bass: [48, 45, 41, 43],
     },
+    spooky: {
+      dt: 0.3, wave: 'triangle', vol: 0.42,
+      mel: [69, _, 72, _, 76, _, 72, _, 75, _, 74, _, 72, _, _, _, 71, _, 74, _, 77, _, 74, _, 72, _, 71, _, 69, _, _, _],
+      bass: [45, 41, 40, 45],
+    },
   };
   const midi = m => 440 * Math.pow(2, (m - 69) / 12);
 
@@ -161,6 +207,7 @@ const Sound = (() => {
         const b = song.bass[Math.floor(step / 8) % song.bass.length];
         tone({ type: 'sine', f0: midi(b), dur: song.dt * 3.5, vol: 0.7, a: 0.02, abs: nextTime, out: musicBus });
       }
+      if (mood === 'spooky' && step % 4 === 2) tone({ type: 'square', f0: 330, f1: 300, dur: 0.05, vol: 0.12, lp: 1200, abs: nextTime, out: musicBus });
       if (mood === 'day' && step % 2 === 1) tone({ type: 'triangle', f0: 2093, dur: 0.04, vol: 0.06, abs: nextTime, out: musicBus });
       nextTime += song.dt;
       step = (step + 1) % 32;
