@@ -10,6 +10,7 @@ It's a plain HTML/SVG/JavaScript web app with no build step and no dependencies.
 | --- | --- | --- |
 | Frog | **Bug snack.** Tap his belly: he giggles, says something silly and spits out a bug sticker. Tap a bug and it does its own trick (the ladybug spins, the bee buzzes around, the caterpillar wiggles, the butterfly flutters, the beetle flips over). Drag a bug onto the frog and he slurps it up with his tongue. Sometimes a **magic wand** pops out instead: drop it on the frog, a bug, a flower or the cow and it turns blue, pink, orange, purple, then a crazy rainbow, then back to normal. | Playable |
 | Penguin chef | **Ice cream kitchen.** Pick a cone, a chocolate-dipped cone or a cup. Tap the tubs to stack up to 7 scoops (strawberry, chocolate, vanilla, mint, blueberry, rainbow), then tap the jars for sprinkles, a cherry, chocolate sauce, whipped cream or candy stars. Drag the ice cream onto the penguin, the walrus, the polar bear cub or the puffin and they eat it scoop by scoop. Reactions depend on what's in it: everyone has a favorite flavor (hearts), 5+ scoops is a brain freeze, rainbow makes them dance, sauce + cream + cherry is a super sundae, mint is minty fresh, an empty cone is silly. Tap the bell and everyone hops. | Playable |
+| Ghost | **Pumpkin house.** Tap a pumpkin in the patch (orange, white, green, purple or pink) and it hops onto the stump. Tap the board to carve eyes, a nose and a mouth (circles, triangles, hearts, stars, smiles, a toothy grin, an "ooh" or a silly tongue). When the face is done it lights up, glows and talks. Drag it onto the spooky house's porch; four glowing pumpkins start a party. The skeletons dance when tapped, the moon sends out bats, a cat lives behind the door and the ghost plays peekaboo. | Playable |
 
 The frog's pond also has other things to poke at: the cow moos, the flowers chime (and every third tap a butterfly sticker pops out), the pond splashes, the clouds rain, and the sun switches day to night (tap the moon to switch back; the music turns into a lullaby).
 
@@ -41,6 +42,7 @@ Press and hold the **top-left corner** for 3 seconds. A panel opens where you ca
 - `js/kit.js`: shared helpers for a game screen (sparkles, speech bubbles, tweens).
 - `js/games/frog.js`: the frog game.
 - `js/games/icecream.js`: the ice cream kitchen.
+- `js/games/pumpkin.js`: the pumpkin house.
 - `sw.js`, `manifest.webmanifest`, `icons/`: what makes it an installable, offline app.
 
 To add a game, draw its screen, then call `App.register({ id, screen, enter, leave, clear })` and point a hub tile's `data-game` at that id. Remember to add its files to `ASSETS` in `sw.js` and bump `CACHE`.
