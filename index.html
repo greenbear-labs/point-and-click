@@ -22,6 +22,7 @@
     <linearGradient id="gSkyDay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc8ff"/><stop offset="1" stop-color="#dcf5ff"/></linearGradient>
     <linearGradient id="gSkyNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141a46"/><stop offset="1" stop-color="#3d4290"/></linearGradient>
     <radialGradient id="gPond" cx=".5" cy=".35" r=".65"><stop offset="0" stop-color="#8fe2ff"/><stop offset="1" stop-color="#3aa4dc"/></radialGradient>
+    <radialGradient id="gGlow"><stop offset="0" stop-color="#fbffa8" stop-opacity=".95"/><stop offset=".45" stop-color="#e8ff6a" stop-opacity=".5"/><stop offset="1" stop-color="#d4ff4a" stop-opacity="0"/></radialGradient>
     <clipPath id="beeClip"><ellipse rx="50" ry="36"/></clipPath>
   </defs>
 
@@ -62,7 +63,7 @@
 
   <!-- hills, barn, fence, grass -->
   <path d="M0 500 Q 300 380 650 470 T 1300 430 T 1600 450 V900 H0Z" fill="#a6e07f"/>
-  <g transform="translate(1000,452)">
+  <g transform="translate(1000,512)">
     <rect x="-52" y="-62" width="104" height="62" fill="#d9483b" stroke="#9e2f26" stroke-width="4"/>
     <path d="M-64 -60 L0 -108 L64 -60Z" fill="#a8322a" stroke="#7e2520" stroke-width="4" stroke-linejoin="round"/>
     <rect x="-20" y="-40" width="40" height="40" fill="#fff"/><path d="M-20 -40 L20 0 M20 -40 L-20 0" stroke="#d9483b" stroke-width="5"/>
@@ -166,6 +167,13 @@
   </g></g>
 
   <rect id="nightShade" class="night-only fade" width="1600" height="900" fill="#0a1450" opacity=".35" pointer-events="none"/>
+  <g id="ambientFireflies" class="night-only fade" pointer-events="none">
+    <g transform="translate(300,520)"><g class="ff-float"><circle r="30" fill="url(#gGlow)"/><circle r="5" fill="#f6ffb0"/></g></g>
+    <g transform="translate(720,460)"><g class="ff-float b"><circle r="30" fill="url(#gGlow)"/><circle r="5" fill="#f6ffb0"/></g></g>
+    <g transform="translate(1000,380)"><g class="ff-float c"><circle r="30" fill="url(#gGlow)"/><circle r="5" fill="#f6ffb0"/></g></g>
+    <g transform="translate(1380,470)"><g class="ff-float"><circle r="30" fill="url(#gGlow)"/><circle r="5" fill="#f6ffb0"/></g></g>
+    <g transform="translate(160,420)"><g class="ff-float c"><circle r="30" fill="url(#gGlow)"/><circle r="5" fill="#f6ffb0"/></g></g>
+  </g>
   <line id="tongue" stroke="#ff6f91" stroke-width="20" stroke-linecap="round" visibility="hidden" pointer-events="none"/>
   <g id="stickers"></g>
   <g id="fx" pointer-events="none"></g>

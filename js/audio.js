@@ -129,6 +129,9 @@ const Sound = (() => {
     },
     night() { [1319, 1047, 880, 784, 659, 523].forEach((f, i) => tone({ type: 'triangle', f0: f, dur: 0.6, vol: 0.14, at: i * 0.12 })); },
     day() { [523, 659, 784, 880, 1047, 1319].forEach((f, i) => tone({ type: 'triangle', f0: f, dur: 0.6, vol: 0.14, at: i * 0.1 })); },
+    twinkle() { [2093, 2637, 3136, 2637, 3520].forEach((f, i) => tone({ type: 'sine', f0: f, dur: 0.18, vol: 0.12, at: i * 0.09 })); },
+    love() { tone({ type: 'triangle', f0: 784, f1: 1047, dur: 0.25, vol: 0.2 }); tone({ type: 'triangle', f0: 1047, f1: 1319, dur: 0.35, vol: 0.2, at: 0.2 }); fx.squeak(2, 0.45); },
+    bonk() { tone({ type: 'square', f0: 260, f1: 140, dur: 0.1, vol: 0.16, lp: 1400 }); tone({ f0: 900, f1: 1400, dur: 0.08, vol: 0.2, at: 0.12 }); tone({ f0: 1400, f1: 700, dur: 0.12, vol: 0.18, at: 0.22 }); },
     poof() { noise({ type: 'lowpass', f0: 1800, f1: 200, dur: 0.35, vol: 0.28 }); },
     rain() { for (let i = 0; i < 9; i++) tone({ f0: r(1500, 2600), f1: r(700, 1100), dur: 0.05, vol: 0.11, at: i * 0.08 + Math.random() * 0.05 }); },
   };

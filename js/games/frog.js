@@ -110,10 +110,10 @@
   /* ---------- particles ---------- */
   const RAINBOW = ['#ff4b4b', '#ff9f1c', '#ffd93b', '#5cc84a', '#3fa9f5', '#9b6bff'];
   function sparkles(x, y, o) {
-    const { n = 10, colors = ['#ffd93b', '#fff'], spread = 130, size = 14, dur = 800 } = o || {};
+    const { n = 10, colors = ['#ffd93b', '#fff'], spread = 130, size = 14, dur = 800, shape = null } = o || {};
     for (let i = 0; i < n; i++) {
       const g = el('g', { transform: `translate(${x},${y})` }, layer.fx);
-      const p = el('path', { d: starPath(size, size * 0.45), fill: pick(colors) }, g);
+      const p = el('path', { d: shape ? shape(size) : starPath(size, size * 0.45), fill: pick(colors) }, g);
       const a = rand(0, Math.PI * 2), d = rand(spread * 0.4, spread);
       const an = anim(p, [
         { transform: 'translate(0,0) scale(.3) rotate(0deg)', opacity: 1 },
@@ -123,6 +123,8 @@
       if (an) an.onfinish = () => g.remove(); else setTimeout(() => g.remove(), dur);
     }
   }
+  const heart = r => `M0 ${r * 0.9} C${-r * 1.6} ${-r * 0.2} ${-r * 0.7} ${-r * 1.3} 0 ${-r * 0.45} C${r * 0.7} ${-r * 1.3} ${r * 1.6} ${-r * 0.2} 0 ${r * 0.9}Z`;
+  const drop = r => `M0 ${-r} Q${r * 0.8} 0 0 ${r * 0.6} Q${-r * 0.8} 0 0 ${-r}Z`;
   function rings(x, y, colors, o) {
     const { width = 7, scale = 9, gap = 70, back = false } = o || {};
     colors.forEach((c, i) => {
@@ -187,7 +189,7 @@
 
   /* ---------- stickers ---------- */
   const stickers = [];
-  const BUG_TYPES = ['ladybug', 'bee', 'caterpillar', 'butterfly', 'beetle'];
+  const BUG_TYPES = ['ladybug', 'bee', 'caterpillar', 'butterfly', 'beetle', 'firefly'];
   const ART = {
     ladybug: `
       <g stroke="#2a2a2a" stroke-width="6" stroke-linecap="round" fill="none"><path d="M-28 -22 L-56 -36 M-36 0 L-62 2 M-28 22 L-54 40 M28 -22 L56 -36 M36 0 L62 2 M28 22 L54 40"/>
@@ -227,6 +229,17 @@
         <ellipse rx="9" ry="34" fill="#3a2a4a"/><circle cy="-36" r="12" fill="#3a2a4a"/>
         <circle cx="-5" cy="-38" r="3.5" fill="#fff"/><circle cx="5" cy="-38" r="3.5" fill="#fff"/>`;
     })(),
+    firefly: `
+      <circle class="ff-halo" cy="22" r="64" fill="url(#gGlow)"/>
+      <g class="wing"><ellipse cx="-20" cy="-12" rx="17" ry="30" fill="#eaf8ff" stroke="#8fc6dd" stroke-width="3" opacity=".88" transform="rotate(-28 -20 -12)"/>
+      <ellipse cx="20" cy="-12" rx="17" ry="30" fill="#eaf8ff" stroke="#8fc6dd" stroke-width="3" opacity=".88" transform="rotate(28 20 -12)"/></g>
+      <ellipse cy="-2" rx="22" ry="28" fill="#5a4636" stroke="#3a2c22" stroke-width="4"/>
+      <ellipse class="ff-tail" cy="28" rx="23" ry="21" fill="var(--main)" stroke="var(--dark)" stroke-width="4"/>
+      <ellipse cx="-7" cy="22" rx="6" ry="4" fill="#fff" opacity=".6"/>
+      <path d="M-6 -48 Q-12 -66 -22 -68 M6 -48 Q12 -66 22 -68" stroke="#3a2c22" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cy="-36" r="18" fill="#5a4636"/>
+      <circle cx="-7" cy="-39" r="6" fill="#fff"/><circle cx="7" cy="-39" r="6" fill="#fff"/><circle cx="-6" cy="-38" r="3" fill="#111"/><circle cx="8" cy="-38" r="3" fill="#111"/>
+      <path d="M-6 -28 Q0 -23 6 -28" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
     beetle: `
       <g stroke="#2a2a3a" stroke-width="6" stroke-linecap="round" fill="none"><path d="M-30 -14 L-54 -30 M-36 10 L-60 12 M-30 32 L-50 50 M30 -14 L54 -30 M36 10 L60 12 M30 32 L50 50"/></g>
       <path d="M0 -52 q-6 -20 6 -30 q2 14 -2 30z" fill="#2a2a3a"/>
@@ -246,7 +259,7 @@
         </g></g>
       </g>`,
   };
-  const DEFAULT_COLOR = { ladybug: '#ff4b4b', bee: '#ffcf33', caterpillar: '#7ed957', butterfly: '#b57cff', beetle: '#3b82f6' };
+  const DEFAULT_COLOR = { ladybug: '#ff4b4b', bee: '#ffcf33', caterpillar: '#7ed957', butterfly: '#b57cff', beetle: '#3b82f6', firefly: '#e4ff5c' };
 
   function setPos(s) {
     s.el.setAttribute('transform', `translate(${s.x.toFixed(1)},${s.y.toFixed(1)}) scale(${s.scale.toFixed(3)})`);
@@ -324,7 +337,8 @@
     spawnCount++; sinceWand++;
     const wands = stickers.filter(s => s.kind === 'wand').length;
     const wantWand = wands < 2 && spawnCount >= 3 && (Math.random() < 0.22 || sinceWand >= 7);
-    const type = wantWand ? 'wand' : pick(BUG_TYPES);
+    const night = svg.classList.contains('night');
+    const type = wantWand ? 'wand' : (night && Math.random() < 0.4 ? 'firefly' : pick(BUG_TYPES));
     if (wantWand) sinceWand = 0;
     mouth('spit', true);
     const to = freeSpot();
@@ -353,6 +367,12 @@
       sparkles(s.x, s.y, { n: 5, colors: ['#fff', '#ffe3f7'], spread: 90, size: 10 });
     },
     beetle(s) { Sound.play('boink'); anim(s.anim, [{ transform: 'scale(1,1)' }, { transform: 'scale(1,-1) translateY(10px)', offset: 0.25 }, { transform: 'scale(1,-1) rotate(20deg) translateY(10px)', offset: 0.45 }, { transform: 'scale(1,-1) rotate(-20deg) translateY(10px)', offset: 0.6 }, { transform: 'translateY(-50px) rotate(180deg)', offset: 0.85 }, { transform: 'scale(1,1) rotate(360deg)' }], 1100); },
+    firefly(s) {
+      Sound.play('twinkle');
+      anim(s.anim.querySelector('.ff-halo'), [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1.6)' }, { opacity: 0.2, transform: 'scale(1)' }, { opacity: 1, transform: 'scale(1.5)' }, { opacity: 0, transform: 'scale(1)' }], 1200);
+      anim(s.anim, [{ transform: 'translate(0,0)' }, { transform: 'translate(20px,-40px)' }, { transform: 'translate(-20px,-60px)' }, { transform: 'translate(0,0)' }], 1200, { easing: 'ease-in-out' });
+      sparkles(s.x, s.y + 22, { n: 6, colors: ['#f4ff8a', '#fff'], spread: 80, size: 9 });
+    },
     wand(s) {
       Sound.play('sparkle');
       anim(s.anim, [{ transform: 'rotate(0) scale(1)' }, { transform: 'rotate(-25deg) scale(1.15)' }, { transform: 'rotate(20deg) scale(1.1)' }, { transform: 'rotate(0) scale(1)' }], 600);
@@ -458,6 +478,7 @@
       tongue.setAttribute('x2', s.x); tongue.setAttribute('y2', s.y);
     });
     tongue.setAttribute('visibility', 'hidden');
+    const wasRainbow = rainbow.has(s.el), cstate = +s.el.dataset.cstate || 0, milky = s.el.dataset.milk === '1';
     removeSticker(s, false);
     mouth('eat', false);
     Sound.play('chomp');
@@ -467,8 +488,25 @@
     anim(belly, [{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(.95)' }, { transform: 'scale(1)' }], 600, { easing: 'ease-in-out' });
     await wait(250);
     giggle(1100);
-    frogSays(EAT_LINES);
     frogBusy = false;
+    if (s.kind === 'wand') {
+      // a magic snack: sparkly hiccup, then the magic works on him
+      Sound.play('sparkle');
+      sparkles(FROG.mouth.x, FROG.mouth.y, { n: 16, colors: RAINBOW, spread: 160 });
+      setTimeout(() => applyWand(frog), 350);
+      return;
+    }
+    if (wasRainbow) { rainbowTummy(); return; }
+    if (cstate >= 1 && cstate <= PALETTE.length) {
+      const p = PALETTE[cstate - 1];
+      rememberColor(frog); rainbow.delete(frog);
+      frog.dataset.cstate = cstate;
+      setColor(frog, p.c, shade(p.c, -0.3));
+      sparkles(FROG.head.x, FROG.head.y, { n: 12, colors: [p.c, '#fff'] });
+      talk('frog', FROG.bubble.x, FROG.bubble.y, p.name.replace('!', ' tummy!'));
+      return;
+    }
+    frogSays(milky ? ['Mmm, milky!', 'Milk and bugs!', 'A milky bug!'] : EAT_LINES);
     if (Math.random() < 0.3) {
       await wait(1700);
       Sound.play('burp');
@@ -477,6 +515,87 @@
       rings(FROG.mouth.x, FROG.mouth.y - 10, ['#bfe9ff', '#d6f5ff'], { width: 4, scale: 4, gap: 150 });
       setTimeout(() => mouth('burp', false), 600);
     }
+  }
+
+  async function rainbowTummy() {
+    frogBusy = true;
+    rememberColor(frog);
+    frog.dataset.cstate = PALETTE.length + 1;
+    rainbow.set(frog, performance.now());
+    Sound.play('rainbow');
+    talk('frog', FROG.bubble.x, FROG.bubble.y, 'Whoa! Rainbow tummy!', { pitch: 2, rate: 1.1 });
+    giggle(2200);
+    anim(frogAnim, [
+      { transform: 'translateY(0) rotate(0)' }, { transform: 'translateY(-70px) rotate(-10deg) scale(1.05,.95)' },
+      { transform: 'translateY(0) rotate(8deg) scale(1.1,.9)' }, { transform: 'translateY(-50px) rotate(-6deg)' },
+      { transform: 'translateY(0) rotate(0) scale(1.08,.92)' }, { transform: 'translateY(0) rotate(0)' },
+    ], 1600, { easing: 'ease-in-out' });
+    for (let i = 0; i < 4; i++) setTimeout(() => sparkles(FROG.head.x + rand(-120, 120), FROG.head.y + rand(-60, 160), { n: 10, colors: RAINBOW, spread: 180, size: 16 }), i * 300);
+    await wait(2100);
+    Sound.play('burp');
+    mouth('burp', true);
+    bubble('frog', FROG.bubble.x, FROG.bubble.y, 'RAINBOW BURP!');
+    rings(FROG.mouth.x, FROG.mouth.y - 10, RAINBOW, { width: 8, scale: 7, gap: 90 });
+    sparkles(FROG.mouth.x, FROG.mouth.y, { n: 24, colors: RAINBOW, spread: 260, size: 15, dur: 1200 });
+    setTimeout(() => mouth('burp', false), 700);
+    frogBusy = false;
+  }
+
+  /* ---------- stickers meeting stickers, and the cow's milk ---------- */
+  function stickerUnder(s) {
+    let best = null, bd = 85;
+    for (const o of stickers) {
+      if (o === s || o.locked || o.held) continue;
+      const d = Math.hypot(o.x - s.x, o.y - s.y);
+      if (d < bd) { bd = d; best = o; }
+    }
+    return best;
+  }
+  function stickerMeet(a, b) {
+    // rainbow is catching: if either one is rainbow, now both are
+    const ra = rainbow.has(a.el), rb = rainbow.has(b.el);
+    if (ra !== rb && a.kind === 'bug' && b.kind === 'bug') {
+      const t = ra ? b : a;
+      rememberColor(t.el); t.el.dataset.cstate = PALETTE.length + 1; rainbow.set(t.el, performance.now());
+      Sound.play('rainbow');
+      sparkles(t.x, t.y, { n: 16, colors: RAINBOW, spread: 140 });
+    }
+    if (a.type === b.type) {
+      // best friends: hearts, a happy dance together, and they stay stacked
+      Sound.play('love');
+      sparkles((a.x + b.x) / 2, (a.y + b.y) / 2 - 40, { n: 9, colors: ['#ff5c8a', '#ff8fb3', '#ffc2d6'], spread: 120, size: 16, shape: heart, dur: 1100 });
+      const nx = b.x + 28, ny = b.y - 28;
+      tween(200, t => { a.x = lerp(a.x, nx, t); a.y = lerp(a.y, ny, t); setPos(a); });
+      [a, b].forEach((s, i) => anim(s.anim, [0, 1, 2, 3, 4, 5].map(k => ({ transform: k === 0 || k === 5 ? 'rotate(0) translateY(0)' : `rotate(${(k % 2 ? 14 : -14) * (i ? -1 : 1)}deg) translateY(${k % 2 ? -16 : 0}px)` })), 900, { easing: 'ease-in-out' }));
+    } else {
+      // strangers: a startled shake, a squeak, and a little hop apart
+      Sound.play('bonk');
+      [a, b].forEach(s => anim(s.anim, [0, 1, 2, 3, 4, 5, 6].map(k => ({ transform: k === 0 || k === 6 ? 'translateX(0)' : `translateX(${k % 2 ? 9 : -9}px) scale(1.06,.94)` })), 500));
+      sparkles((a.x + b.x) / 2, (a.y + b.y) / 2 - 50, { n: 5, colors: ['#ffd93b', '#fff'], spread: 70, size: 11 });
+      const ang = Math.atan2(a.y - b.y, a.x - b.x) || -Math.PI / 4, vb = visibleBox(60);
+      const x0 = a.x, y0 = a.y;
+      const nx = clamp(b.x + Math.cos(ang) * 125, vb.x0, vb.x1), ny = clamp(b.y + Math.sin(ang) * 125, vb.y0, vb.y1);
+      setTimeout(() => tween(380, t => { a.x = lerp(x0, nx, t); a.y = lerp(y0, ny, t) - Math.sin(Math.PI * t) * 60; setPos(a); }), 420);
+    }
+  }
+  function overCow(s) {
+    const c = toClient(s.x, s.y);
+    s.el.style.pointerEvents = 'none';
+    try { return document.elementsFromPoint(c.x, c.y).some(n => n.closest && n.closest('#cow')); }
+    finally { s.el.style.pointerEvents = ''; }
+  }
+  function milkBath(s) {
+    rememberColor(s.el);
+    rainbow.delete(s.el);
+    s.el.dataset.cstate = 0;
+    s.el.dataset.milk = '1';
+    setColor(s.el, '#ffffff', '#c3c9d6');
+    Sound.play('moo');
+    setTimeout(() => Sound.play('splash'), 250);
+    tapCowBounce();
+    bubble('cow', 1050, 330, pick(['Moo! Milky!', 'Moo, splash!', 'Moooilk!']));
+    sparkles(s.x, s.y, { n: 12, colors: ['#ffffff', '#f2f6ff', '#e6ecf7'], spread: 110, size: 14, shape: drop, dur: 1000 });
+    anim(s.anim, [{ transform: 'scale(1,1)' }, { transform: 'scale(1.2,.8)' }, { transform: 'scale(.9,1.1) rotate(8deg)' }, { transform: 'scale(1,1) rotate(-6deg)' }, { transform: 'scale(1,1)' }], 800);
   }
 
   /* ---------- the other farm stations (placeholders for now) ---------- */
@@ -497,12 +616,15 @@
     if (flowerTaps % 3 === 0) setTimeout(() => launch('butterfly', c, freeSpot()), 300);
   }
   const cow = $('#cow');
-  function tapCow() {
-    Sound.play('moo');
+  function tapCowBounce() {
     cow.classList.add('moo');
     setTimeout(() => cow.classList.remove('moo'), 1100);
     anim(animTarget(cow), [{ transform: 'translateY(0)' }, { transform: 'translateY(-36px) scale(1.03,.97)' }, { transform: 'translateY(0) scale(1.05,.95)' }, { transform: 'translateY(0)' }], 600);
     anim(cow.querySelector('.cow-head'), [{ transform: 'rotate(0)' }, { transform: 'rotate(-12deg)' }, { transform: 'rotate(8deg)' }, { transform: 'rotate(0)' }], 1100);
+  }
+  function tapCow() {
+    Sound.play('moo');
+    tapCowBounce();
     bubble('cow', 1050, 330, pick(['Moooo!', 'Moo moo!', 'Mooooooo!']));
   }
   function tapPond(p) {
@@ -577,10 +699,9 @@
     s.x = clamp(p.x - d.ox, vb.x0, vb.x1);
     s.y = clamp(p.y - d.oy, vb.y0, vb.y1);
     setPos(s);
-    if (s.kind === 'bug') {
-      lookAt(s.x, s.y);
-      mouth('eager', nearFrog(s));
-    } else {
+    lookAt(s.x, s.y);
+    mouth('eager', nearFrog(s));
+    if (s.kind === 'wand') {
       const tip = wandTip(s);
       if (performance.now() - d.trail > 70) { d.trail = performance.now(); sparkles(tip.x, tip.y, { n: 2, colors: RAINBOW, spread: 40, size: 9, dur: 600 }); }
     }
@@ -596,8 +717,11 @@
     mouth('eager', false);
     if (!s.el.isConnected) return;
     if (!d.moved) { BUG_TAP[s.type](s); return; }
+    if (nearFrog(s) && !frogBusy) { eat(s); return; }  // the frog eats anything, wands too
+    const other = stickerUnder(s);
     if (s.kind === 'bug') {
-      if (nearFrog(s) && !frogBusy) { eat(s); return; }
+      if (other) { stickerMeet(s, other); return; }
+      if (overCow(s)) { milkBath(s); return; }
       Sound.play('land');
       anim(s.anim, [{ transform: 'scale(1,1)' }, { transform: 'scale(1.15,.85)' }, { transform: 'scale(1,1)' }], 250);
     } else {
