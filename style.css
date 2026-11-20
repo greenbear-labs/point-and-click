@@ -7,7 +7,7 @@ html, body {
   font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Nunito", "Comic Sans MS", system-ui, sans-serif;
 }
 .screen { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; }
-#scene[hidden], #hub[hidden] { display: none; }
+.screen[hidden] { display: none; }
 .screen svg { width: 100%; height: 100%; display: block; }
 .screen * { transform-origin: 0 0; }
 .tap { cursor: pointer; }
@@ -97,3 +97,47 @@ html, body {
 @keyframes ffloat { 0%, 100% { translate: 0 0; } 25% { translate: 40px -30px; } 50% { translate: -10px -60px; } 75% { translate: -45px -20px; } }
 .night .ff-tail { stroke: #f6ffb0; }
 .night .firefly .ff-halo { animation-duration: 1.8s; }
+
+/* ice cream kitchen */
+.eater .mouth-open { display: none; }
+.eater.open .mouth-open { display: inline; }
+.eater.open .mouth-closed { display: none; }
+#ic-walrus.open .mouth-open { display: inline; }
+
+/* pumpkin house */
+.ghost-bob { animation: gbob 3.4s ease-in-out infinite; }
+@keyframes gbob { 50% { transform: translateY(-18px); } }
+.pkin { --hole: #4a1c00; }
+.pkin.lit { --hole: var(--glow); }
+.pkin .halo { opacity: 0; transition: opacity .8s; }
+.pkin.lit .halo { opacity: 1; animation: flick 1.8s ease-in-out infinite; }
+.pkin.lit .face { animation: flick 1.3s ease-in-out infinite; }
+@keyframes flick { 0%, 100% { opacity: 1; } 35% { opacity: .78; } 55% { opacity: .96; } 80% { opacity: .84; } }
+.pk-btn-bg { fill: #2a1d52; stroke: #ffb347; stroke-width: 5; transition: fill .2s, stroke .2s; }
+.pk-btn.chosen .pk-btn-bg { fill: #5a3fa0; stroke: #fff; stroke-width: 7; }
+.pk-win { transition: fill-opacity .8s; fill-opacity: .35; }
+
+/* car wash */
+.cw-veh .paint { fill: var(--body); stroke: rgba(0,0,0,.28); }
+.cw-veh .glit { display: none; }
+.cw-veh.sparkly .glit { display: inline; animation: flick 1s ease-in-out infinite; }
+.cw-veh.alive .pupil { animation: look 2.6s ease-in-out infinite; }
+@keyframes look { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(9px,4px); } 50% { transform: translate(-8px,6px); } 75% { transform: translate(2px,-9px); } }
+.cw-drip { animation: drip 1.4s ease-in infinite; }
+@keyframes drip { 0% { transform: translateY(0) scale(.4); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(46px) scale(1); opacity: 0; } }
+#cw-light circle { fill: #59626d; transition: fill .15s; }
+#cw-light.red .lt-r { fill: #ff4d4d; }
+#cw-light.yellow .lt-y { fill: #ffd93b; }
+#cw-light.green .lt-g { fill: #5cdc4a; }
+#carwash [data-act=tool] .glow { fill: none; stroke: #ffd93b; stroke-width: 10; opacity: 0; }
+#carwash [data-act=tool].cw-next .glow { animation: nextglow 1s ease-in-out infinite; }
+@keyframes nextglow { 0%, 100% { opacity: .35; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.12); } }
+#carwash [data-act=tool].cw-next .anim { animation: nextbob 1s ease-in-out infinite; }
+@keyframes nextbob { 50% { transform: scale(1.1); } }
+#carwash [data-act=tool].dim .anim { opacity: .45; }
+#carwash [data-act=tool] .check { display: none; }
+#carwash [data-act=tool].done .check { display: inline; }
+#cw-light.cw-next { animation: nextbob 1s ease-in-out infinite; transform-origin: 800px 344px; }
+#cw-hand .hand-bob { animation: handbob .8s ease-in-out infinite; }
+@keyframes handbob { 50% { transform: translateY(14px); } }
+#cw-light.cw-next .lt-g { fill: #5cdc4a; }
